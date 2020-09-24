@@ -2,7 +2,7 @@
 Simple and small library built on top of HttpListener with 
 fast routing and built-in session storage.
 
-## Install
+### Install
 Copy the SharpWebServer folder to your solution and you're done.
 
 ### Example
