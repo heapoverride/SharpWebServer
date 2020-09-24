@@ -45,6 +45,35 @@ class Program {
                 request.Respond("Error: (min) must be smaller or equal to (max)");
             }
         }));
+        
+        /* 
+         *  GET /set/(value)
+         */
+        router.Routes.Add(new Route("GET", null, @"^\/set\/([^\/]*)$", request => {
+            string value = request.Groups[0];
+
+            request.Session.Set("value", value);
+
+            request.SetContentType("text/plain");
+            request.Respond($"success: value set");
+        }));
+
+        /* 
+         *  GET /get
+         */
+        router.Routes.Add(new Route("GET", null, @"^\/get$", request => {
+            request.SetContentType("text/plain");
+
+            object value = request.Session.Get("value");
+
+            if (value != null)
+            {
+                request.Respond($"value = {value}");
+            } else
+            {
+                request.Respond($"error: value is not set");
+            }
+        }));
 
         /* instantiate new server */
         string[] prefixes = new string[] {
