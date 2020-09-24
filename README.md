@@ -47,7 +47,7 @@ class Program {
 
         /* instantiate new server */
         string[] prefixes = new string[] {
-            "http://*:8888/",
+            "http://*:80/",
         };
         Server server = new Server(prefixes, router);
 
