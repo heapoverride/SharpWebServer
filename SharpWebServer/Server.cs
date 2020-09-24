@@ -118,17 +118,7 @@ namespace SharpWebServer
 
                 if (this.router != null)
                 {
-                    for (int i = router.Routes.Count - 1; i > -1; i--)
-                    {
-                        if (router.Routes[i].Test(ref request))
-                        {
-                            return;
-                        }
-                    }
-
-                    // route not found
-                    request.SetStatus(404, "Route not found");
-                    request.Respond("404 - Route not found");
+                    router.Route(ref request);
                 }
                 else
                 {

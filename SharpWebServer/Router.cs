@@ -15,6 +15,21 @@ namespace SharpWebServer
         {
 
         }
+
+        public bool Route(ref Request request)
+        {
+            for (int i = Routes.Count - 1; i > -1; i--)
+            {
+                if (Routes[i].Test(ref request))
+                    return true;
+            }
+
+            // route not found
+            request.SetStatus(404, "Route not found");
+            request.Respond("404 - Route not found");
+
+            return false;
+        }
     }
 
     public class Route
