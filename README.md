@@ -1,5 +1,8 @@
 # SharpWebServer
-Small wrapper for HttpListener in C# with fast routing
+Small wrapper for HttpListener in C# with fast routing.
+
+## Install
+Copy the SharpWebServer folder to your solution and you're done.
 
 ## Example
 ```csharp
