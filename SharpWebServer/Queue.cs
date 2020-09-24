@@ -21,6 +21,11 @@ namespace SharpWebServer
             return queue.Count;
         }
 
+        public bool IsEmpty()
+        {
+            return queue.Count == 0;
+        }
+
         public T Fetch<T>()
         {
             if (queue.Count > 0)
@@ -35,6 +40,18 @@ namespace SharpWebServer
             }
 
             return default(T);
+        }
+
+        public T[] Fetch<T>(int amount)
+        {
+            List<T> items = new List<T>();
+
+            while (!IsEmpty() && items.Count < amount)
+            {
+                items.Add(Fetch<T>());
+            }
+
+            return items.ToArray();
         }
 
         public T[] FetchAll<T>()
