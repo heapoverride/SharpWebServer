@@ -25,14 +25,13 @@ namespace SharpWebServer
             return size != -1 && queue.Count == size;
         }
 
-        public bool Add<T>(T item)
+        public void Add<T>(T item)
         {
-            if (!IsFull())
+            if (IsFull())
             {
-                queue.Add(item);
-                return true;
+                queue.RemoveAt(0);
             }
-            return false;
+            queue.Add(item);
         }
 
         public bool IsEmpty()
@@ -44,13 +43,10 @@ namespace SharpWebServer
         {
             if (queue.Count > 0)
             {
-                lock (queue)
-                {
-                    T item = (T)queue[0];
-                    queue.RemoveAt(0);
+                T item = (T)queue[0];
+                queue.RemoveAt(0);
 
-                    return item;
-                }
+                return item;
             }
 
             return default(T);
@@ -60,9 +56,12 @@ namespace SharpWebServer
         {
             List<T> items = new List<T>();
 
-            while (!IsEmpty() && items.Count < amount)
+            lock (queue)
             {
-                items.Add(Fetch<T>());
+                while (!IsEmpty() && items.Count < amount)
+                {
+                    items.Add(Fetch<T>());
+                }
             }
 
             return items.ToArray();
