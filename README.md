@@ -5,7 +5,7 @@ fast routing and built-in session storage.
 ## Install
 Copy the SharpWebServer folder to your solution and you're done.
 
-## Example
+### Example
 ```csharp
 using System;
 using System.Collections.Generic;
