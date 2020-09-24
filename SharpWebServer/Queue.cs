@@ -8,17 +8,31 @@ namespace SharpWebServer
 {
     public class Queue
     {
+        private long size = -1;
         private List<object> queue = new List<object>();
 
         public Queue()
         {
-
         }
 
-        public long Add<T>(T item)
+        public Queue(long size)
         {
-            queue.Add(item);
-            return queue.Count;
+            this.size = size;
+        }
+
+        public bool IsFull()
+        {
+            return size != -1 && queue.Count == size;
+        }
+
+        public bool Add<T>(T item)
+        {
+            if (!IsFull())
+            {
+                queue.Add(item);
+                return true;
+            }
+            return false;
         }
 
         public bool IsEmpty()
