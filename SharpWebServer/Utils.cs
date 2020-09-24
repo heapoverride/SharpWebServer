@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 
-namespace TinyWebServer
+namespace SharpWebServer
 {
-    class Utils
+    public static class Utils
     {
-        public static Random random = new Random();
+        private static Random random = new Random();
 
         public static byte[] GetRandomBytes(int length)
         {
@@ -51,7 +51,7 @@ namespace TinyWebServer
             }
         }
 
-        public string RemoveQueryString(string url)
+        public static string RemoveQueryString(string url)
         {
             int i = url.IndexOf('?');
             if (i > -1)
@@ -61,7 +61,7 @@ namespace TinyWebServer
             return url;
         }
 
-        private string GetFileExtension(string url)
+        public static string GetFileExtension(string url)
         {
             string[] parts = url.Split('/');
 
@@ -81,19 +81,19 @@ namespace TinyWebServer
             return null;
         }
 
-        public string RemoveDoubleSlashes(string url)
+        public static string RemoveDoubleSlashes(string url)
         {
             return url.Replace("//", "/");
         }
 
-        public string GetFileName(string url)
+        public static string GetFileName(string url)
         {
             int i = url.LastIndexOf('/');
             if (i > -1) return url.Substring(i + 1);
             return null;
         }
 
-        public string RemoveFileName(string url)
+        public static string RemoveFileName(string url)
         {
             int i = url.LastIndexOf('/');
             if (i > -1)
