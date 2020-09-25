@@ -19,12 +19,14 @@ class Program {
         /* instantiate new router */
         Router router = new Router();
 
+
         /* 
          *  GET /
          */
         router.Routes.Add(new Route("GET", null, @"^\/$", request => {
             request.Respond("Hello world!");
         }));
+
 
         /* 
          *  GET /random/(min)/(max)
@@ -45,6 +47,7 @@ class Program {
                 request.Respond("Error: (min) must be smaller or equal to (max)");
             }
         }));
+        
         
         /* 
          *  GET /set/(value)
@@ -83,6 +86,31 @@ class Program {
                 request.Respond($"error: no session");
             }
         }));
+        
+        
+        /* 
+         *  GET /add/(item)
+         */
+        router.Routes.Add(new Route("GET", null, @"^\/add/([^\/]*)$", request => {
+            string item = request.Groups[0];
+
+            if (request.Session == null)
+            {
+                request.CreateSession()
+                    .Set("firstName", "Robert")
+                    .Set("lastName", "Robertson")
+                    .Set("cartItems", new List<string>());
+            }
+
+            List<string> cartItems = request.Session.Get<List<string>>("cartItems");
+            cartItems.Add(item);
+
+            JArray array = new JArray(cartItems.ToArray());
+
+            request.SetContentType("application/json");
+            request.Respond(array.ToString());
+        }));
+        
 
         /* instantiate new server */
         string[] prefixes = new string[] {
