@@ -50,8 +50,10 @@ class Program {
          *  GET /set/(value)
          */
         router.Routes.Add(new Route("GET", null, @"^\/set\/([^\/]*)$", request => {
-            string value = request.Groups[0];
+            if (request.Session == null)
+                request.CreateSession();
 
+            string value = request.Groups[0];
             request.Session.Set("value", value);
 
             request.SetContentType("text/plain");
@@ -64,14 +66,21 @@ class Program {
         router.Routes.Add(new Route("GET", null, @"^\/get$", request => {
             request.SetContentType("text/plain");
 
-            object value = request.Session.Get("value");
-
-            if (value != null)
+            if (request.Session != null)
             {
-                request.Respond($"value = {value}");
+                object value = request.Session.Get("value");
+
+                if (value != null)
+                {
+                    request.Respond($"value = {value}");
+                }
+                else
+                {
+                    request.Respond($"error: value is not set");
+                }
             } else
             {
-                request.Respond($"error: value is not set");
+                request.Respond($"error: no session");
             }
         }));
 
