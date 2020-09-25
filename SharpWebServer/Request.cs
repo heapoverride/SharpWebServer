@@ -20,10 +20,27 @@ namespace SharpWebServer
         public string QueryString;
         public string[] Groups;
         public Session Session;
+        public Server Server;
 
         public Request()
         {
 
+        }
+
+        public void CreateSession()
+        {
+            string token = Server.Sessions.Create();
+            Session = Server.Sessions.Get(token);
+            Context.Response.AddHeader("Set-Cookie", $"SESSION={token}; Path=/;");
+        }
+
+        public void DestroySession()
+        {
+            if (Session != null)
+            {
+                Session = null;
+                Context.Response.AddHeader("Set-Cookie", $"SESSION=0; Path=/; Max-Age=0;");
+            }
         }
 
         public void SetContentType(string contentType)

@@ -93,13 +93,6 @@ namespace SharpWebServer
                 // session cookie
                 Cookie session_cookie = GetCookie(context, "SESSION");
                 Session session = session_cookie != null ? sessions.Get(session_cookie.Value) : null;
-                if (session == null)
-                {
-                    string token = sessions.Create();
-                    session = sessions.Get(token);
-
-                    context.Response.Headers.Add("Set-Cookie", $"SESSION={token}; Path=/;");
-                }
 
                 Request request = new Request
                 {
@@ -111,6 +104,7 @@ namespace SharpWebServer
                     QueryString = context.Request.RawUrl.ToString(),
                     Headers = context.Request.Headers,
                     Session = session,
+                    Server = this
                 };
 
                 // set default content type
