@@ -27,10 +27,12 @@ namespace SharpWebServer
 
         }
 
-        public void CreateSession()
+        public Session CreateSession()
         {
             Session session = Server.Sessions.Create();
+            Session = session;
             Context.Response.AddHeader("Set-Cookie", $"SESSION={session.Token}; Path=/;");
+            return session;
         }
 
         public void DestroySession()

@@ -78,7 +78,7 @@ namespace SharpWebServer
             return storage.ContainsKey(name);
         }
 
-        public void Set(string name, object value)
+        public Session Set(string name, object value)
         {
             if (Contains(name))
             {
@@ -88,6 +88,8 @@ namespace SharpWebServer
             {
                 storage.Add(name, value);
             }
+
+            return this;
         }
 
         public T Get<T>(string name)
