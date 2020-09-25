@@ -15,12 +15,30 @@ namespace SharpWebServer
 
         }
 
-        public string Create()
+        public Session Create()
         {
             string token = Hash.SHA256(Utils.GetRandomBytes(1024));
-            sessions.Add(token, new Session(token));
+            Session session = new Session(token);
 
-            return token;
+            sessions.Add(token, session);
+
+            return session;
+        }
+
+        public void Remove(Func<Session, bool> removeCallback)
+        {
+            lock (sessions)
+            {
+                string[] tokens = sessions.Keys.ToArray<string>();
+                for (int i=0; i<tokens.Length; i++)
+                {
+                    if (removeCallback(sessions[tokens[i]]) == true)
+                    {
+                        Remove(tokens[i]);
+                        i--;
+                    }
+                }
+            }
         }
 
         public bool Contains(string token)
@@ -72,13 +90,19 @@ namespace SharpWebServer
             }
         }
 
-        public object Get(string name)
+        public T Get<T>(string name)
         {
             if (Contains(name))
             {
-                return storage[name];
+                return (T)storage[name];
             }
-            return null;
+
+            return default(T);
+        }
+
+        public string Get(string name)
+        {
+            return Get<string>(name);
         }
 
         public void Remove(string name)
