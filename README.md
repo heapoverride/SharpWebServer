@@ -40,7 +40,7 @@ class Program {
             if (min <= max)
             {
                 // respond with random number between (min) and (max)
-                request.Respond(random.Next(min, max).ToString());
+                request.Respond(random.Next(min, max+1).ToString());
             } else
             {
                 // error
