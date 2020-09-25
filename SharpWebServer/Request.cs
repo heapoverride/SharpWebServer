@@ -17,7 +17,7 @@ namespace SharpWebServer
         public NameValueCollection Params;
         public byte[] Body;
         public NameValueCollection Headers;
-        public string QueryString;
+        public string Path;
         public string[] Groups;
         public Session Session;
         public Server Server;

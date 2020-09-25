@@ -101,7 +101,7 @@ namespace SharpWebServer
                     Method = method,
                     Params = parameters,
                     Body = body,
-                    QueryString = context.Request.RawUrl.ToString(),
+                    Path = context.Request.RawUrl.ToString(),
                     Headers = context.Request.Headers,
                     Session = session,
                     Server = this
