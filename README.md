@@ -110,6 +110,17 @@ class Program {
             request.SetContentType("application/json");
             request.Respond(array.ToString());
         }));
+
+
+        /* 
+         *  GET /stream
+         *  - note that this expects to find file 'test.mp4' 
+         *    from the program's directory
+         */
+        router.Routes.Add(new Route("GET", null, @"^\/stream$", request => {
+            request.SetContentType("video/mp4");
+            request.StreamMedia("test.mp4");
+        }));
         
 
         /* instantiate new server */
