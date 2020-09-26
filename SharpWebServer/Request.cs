@@ -84,5 +84,40 @@ namespace SharpWebServer
         {
             Respond(Encoding.UTF8.GetBytes(text));
         }
+
+        public void StreamMedia(string filePath)
+        {
+            // stream audio and video files with support for range requests
+            SetStatus(206);
+            Context.Response.AddHeader("Accept-Ranges", "bytes");
+
+            int read;
+            byte[] buffer = new byte[4096];
+
+            using (Stream stream = new System.IO.FileStream(filePath, System.IO.FileMode.Open,
+                System.IO.FileAccess.Read, System.IO.FileShare.Read))
+            {
+                Context.Response.ContentLength64 = stream.Length;
+
+                using (BinaryWriter writer = new BinaryWriter(Context.Response.OutputStream))
+                {
+                    if (!String.IsNullOrEmpty(Context.Request.Headers["Range"]))
+                    {
+                        string[] range = Context.Request.Headers["Range"].Split(new char[] { '=', '-' });
+                        int beginPos = int.Parse(range[1]);
+                        int endPos = int.Parse(range[1]);
+
+                        stream.Seek(beginPos, SeekOrigin.Begin);
+                        Context.Response.AddHeader("Content-Range", String.Format("bytes {0}-{1}/{2}", beginPos, stream.Length - 1, stream.Length));
+                    }
+
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        writer.Write(buffer, 0, buffer.Length);
+                        writer.Flush();
+                    }
+                }
+            }
+        }
     }
 }

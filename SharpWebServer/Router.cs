@@ -55,7 +55,7 @@ namespace SharpWebServer
             if (!(method == null || method.ToUpper() == request.Method))
                 return false;
 
-            Match match = this.regex.Match(request.QueryString);
+            Match match = this.regex.Match(request.Path);
 
             if (match.Success)
             {
