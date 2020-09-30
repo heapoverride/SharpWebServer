@@ -20,7 +20,7 @@ namespace SharpWebServer
         {
             for (int i = Routes.Count - 1; i > -1; i--)
             {
-                if (Routes[i].Test(ref request))
+                if (Routes[i].Test(ref request) && request.Handled)
                     return true;
             }
 

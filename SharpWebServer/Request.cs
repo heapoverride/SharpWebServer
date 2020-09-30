@@ -21,6 +21,7 @@ namespace SharpWebServer
         public string[] Groups;
         public Session Session;
         public Server Server;
+        public bool Handled;
 
         public Request()
         {
@@ -77,6 +78,42 @@ namespace SharpWebServer
             }
             catch (Exception)
             {
+            }
+        }
+
+        public void Serve(string wwwRoot)
+        {
+            string path = Utils.RemoveQueryString(Path.Remove(0, 1));
+            path = System.IO.Path.Combine(wwwRoot, path.Replace("..", ""));
+            string ext = Utils.GetFileExtension(path);
+            string mime = Utils.GetMimeType(ext);
+
+            if (ext == null)
+            {
+                foreach (string ie in new string[] { "htm", "html" })
+                {
+                    string index = System.IO.Path.Combine(path, $"index.{ie}");
+                    if (File.Exists(index))
+                    {
+                        Respond(File.ReadAllText(index));
+                        return;
+                    }
+                }
+
+                SetStatus(404);
+                Respond("");
+            }
+            else
+            {
+                SetContentType(mime);
+                if (mime.Contains("video") || mime.Contains("audio"))
+                {
+                    StreamMedia(path);
+                }
+                else
+                {
+                    Respond(File.ReadAllBytes(path));
+                }
             }
         }
 

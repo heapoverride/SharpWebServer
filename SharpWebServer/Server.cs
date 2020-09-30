@@ -104,7 +104,8 @@ namespace SharpWebServer
                     Path = context.Request.RawUrl.ToString(),
                     Headers = context.Request.Headers,
                     Session = session,
-                    Server = this
+                    Server = this,
+                    Handled = true,
                 };
 
                 // set default content type
