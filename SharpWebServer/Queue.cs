@@ -11,6 +11,8 @@ namespace SharpWebServer
         private long size = -1;
         private List<object> queue = new List<object>();
 
+        public long Count { get { return queue.Count; } }
+
         public Queue()
         {
         }
@@ -18,6 +20,11 @@ namespace SharpWebServer
         public Queue(long size)
         {
             this.size = size;
+        }
+
+        public bool IsEmpty()
+        {
+            return queue.Count == 0;
         }
 
         public bool IsFull()
@@ -32,11 +39,6 @@ namespace SharpWebServer
                 queue.RemoveAt(0);
             }
             queue.Add(item);
-        }
-
-        public bool IsEmpty()
-        {
-            return queue.Count == 0;
         }
 
         public T Fetch<T>()
