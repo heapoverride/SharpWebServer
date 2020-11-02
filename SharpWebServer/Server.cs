@@ -77,10 +77,19 @@ namespace SharpWebServer
                 string method = context.Request.HttpMethod.ToUpper();
                 NameValueCollection parameters = context.Request.QueryString;
                 Stream inputStream = context.Request.InputStream;
-                byte[] body = new byte[] { };
+                byte[] body = null;
+
                 if (method == "POST")
                 {
-                    body = Encoding.UTF8.GetBytes(new StreamReader(inputStream).ReadToEnd());
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        int read; byte[] buffer = new byte[32768];
+                        while ((read = inputStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+                        body = ms.ToArray();
+                    }
 
                     if (context.Request.Headers.AllKeys.Contains("Content-Encoding") &&
                         context.Request.Headers.Get("Content-Encoding").Contains("deflate"))
