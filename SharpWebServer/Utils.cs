@@ -5,12 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
+using System.Security.Cryptography;
 
 namespace SharpWebServer
 {
     public static class Utils
     {
         private static Random random = new Random();
+
+        public static string SHA256(byte[] input)
+        {
+            SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
+            byte[] inputBytes = input;
+            byte[] hash = sha256.ComputeHash(inputBytes);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
+            }
+            return sb.ToString().ToLower();
+        }
 
         public static byte[] GetRandomBytes(int length)
         {

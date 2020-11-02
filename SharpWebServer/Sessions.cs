@@ -17,7 +17,7 @@ namespace SharpWebServer
 
         public Session Create()
         {
-            string token = Hash.SHA256(Utils.GetRandomBytes(1024));
+            string token = Utils.SHA256(Utils.GetRandomBytes(1024));
             Session session = new Session(token);
 
             sessions.Add(token, session);
