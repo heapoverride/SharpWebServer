@@ -101,13 +101,10 @@ namespace SharpWebServer
             if (parts.Length > 0)
             {
                 string last = parts[parts.Length - 1];
-                if (last.Contains("."))
+                int index = last.LastIndexOf('.');
+                if (index > -1)
                 {
-                    string[] _parts = last.Split('.');
-                    if (_parts[1].Length > 0)
-                    {
-                        return _parts[1].ToLower();
-                    }
+                    return last.Substring(index+1);
                 }
             }
 
@@ -136,7 +133,7 @@ namespace SharpWebServer
             return url;
         }
 
-        private static string[,] mimeTypes = new string[,] {
+        public static string[,] mimeTypes = new string[,] {
             { "htm", "text/html" },
             { "html", "text/html" },
             { "js", "text/javascript" },
@@ -162,7 +159,7 @@ namespace SharpWebServer
             { "epub", "application/epub+zip" },
             { "gz", "application/gzip" },
             { "gif", "image/gif" },
-            { "ico", "image/vnd.microsoft.icon" },
+            { "ico", "image/x-icon" },
             { "ics", "text/calendar" },
             { "jar", "application/java-archive" },
             { "json", "application/json" },
@@ -183,7 +180,7 @@ namespace SharpWebServer
             { "opus", "audio/opus" },
             { "otf", "font/otf" },
             { "pdf", "application/pdf" },
-            { "php", "application/x-httpd-php" },
+            { "php", "text/html" },
             { "ppt", "application/vnd.ms-powerpoint" },
             { "pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
             { "rar", "application/vnd.rar" },
